@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'com.opencsv', name: 'opencsv', version: '5.3'
+
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.0-M1'
+    // 'test events were not received' below fixed it (needed api plus engine)
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.0-M1'
+}
+
+// tell Gradle build tool that we are using JUnit for testing
+test {
+    useJUnitPlatform()
+}
