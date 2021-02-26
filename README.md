@@ -3,7 +3,7 @@
 A CLI programme that automatically transfers funds from the customer’s savings account to their current account to minimise overdraft fees.
 
 ## Build Details
-Written in Java 15 with Gradle build automation tool to configure dependencies.
+Written in Java 15 with Gradle build automation tool to configure dependencies (see `build.gradle`)
 
 ## Requirements
 Gradle required to build JAR file, but this is done **automatically** when using constructing the `.jar` file in the set-up.
