@@ -9,8 +9,21 @@ repositories {
     mavenCentral()
 }
 
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    manifest {
+        attributes(
+                'Main-Class': 'test.technical.Main'
+        )
+    }
+}
+
 dependencies {
-    implementation group: 'com.opencsv', name: 'opencsv', version: '5.3'
+    // used compile instead of implementation to appear on compile classpath when creating JAR
+    compile group: 'com.opencsv', name: 'opencsv', version: '5.3'
+    //implementation group: 'com.opencsv', name: 'opencsv', version: '5.3'
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.0-M1'
     // 'test events were not received' below fixed it (needed api plus engine)
