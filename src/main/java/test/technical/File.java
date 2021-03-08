@@ -33,6 +33,23 @@ public class File {
         return null;   // should never reach
     }
 
+    private List<String[]> generateDailyTransactionRecords(String date) {
+        List<String[]> transactions = generateTransactionRecords();
+        ArrayList<String[]> dailyTransactions = new ArrayList<>();
+
+        for (int i=1; i<transactions.size(); i++) {
+            if (isValid(transactions.get(i))) {
+                String transactionDateTime = transactions.get(i)[3];
+                String transactionDate = transactionDateTime.substring(0, 10);
+                if (transactionDate.equals(date)) {
+                    dailyTransactions.add(transactions.get(i));
+                }
+            }
+        }
+
+        return dailyTransactions;
+    }
+
     private boolean isValid(String[] transaction) {
         if (transaction.length == 5) {
             return true;
@@ -72,9 +89,9 @@ public class File {
         return 0;
     }
 
-    public ArrayList<Double> getCurrentAccountValues(Integer accountID) {
+    public ArrayList<Double> getCurrentAccountValues(Integer accountID,String date) {
         ArrayList<Double> currentAccountValues = new ArrayList<Double>();
-        List<String[]> transactions = generateTransactionRecords();
+        List<String[]> transactions = generateDailyTransactionRecords(date);
 
         for (String[] transaction : transactions) {
             if (transaction[0].equals(accountID.toString())) {
@@ -86,9 +103,9 @@ public class File {
         return currentAccountValues;
     }
 
-    public ArrayList<Double> getSavingsAccountValues(Integer accountID) {
+    public ArrayList<Double> getSavingsAccountValues(Integer accountID,String date) {
         ArrayList<Double> savingsAccountValues = new ArrayList<Double>();
-        List<String[]> transactions = generateTransactionRecords();
+        List<String[]> transactions = generateDailyTransactionRecords(date);
 
         for (String[] transaction : transactions) {
             if (transaction[0].equals(accountID.toString())) {
@@ -138,5 +155,48 @@ public class File {
         for (int i=0; i<header.length; i++) {
             System.out.print(savingsAdjustment[i] + " ");
         }
+    }
+
+    private int getFirstValidTransactionIndex(List<String[]> transactions) {
+        for (int i=1; i<transactions.size(); i++) {     // skip header
+            if (isValid(transactions.get(i))) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private String extractDate(String dateTime) {
+        return dateTime.substring(0,10);    // first 10 chars i.e. the date
+    }
+
+    private String getInitialDate(List<String[]> transactions) {
+        int firstValidTransactionIndex = getFirstValidTransactionIndex(transactions);
+        String initialDateTime = transactions.get(firstValidTransactionIndex)[3];
+        String initialDate = extractDate(initialDateTime);
+
+        return initialDate;
+    }
+
+    public ArrayList<String> getDates() {
+        List<String[]> transactions = generateTransactionRecords();
+        ArrayList<String> dates = new ArrayList<>();
+
+        String initialDate = getInitialDate(transactions);
+
+        dates.add(initialDate);
+
+        for (int i=1; i<transactions.size(); i++) {
+            if (isValid(transactions.get(i))) {
+                String transactionDateTime = transactions.get(i)[3];
+                String transactionDate = extractDate(transactionDateTime);
+                if (!transactionDate.equals(initialDate)) {
+                    dates.add(transactionDate);
+                    initialDate = transactionDate;
+                }
+            }
+        }
+
+        return dates;
     }
 }

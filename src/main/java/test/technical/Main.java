@@ -1,5 +1,6 @@
 package test.technical;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -19,24 +20,27 @@ public class Main {
         CurrentAccount currentAccount = new CurrentAccount(currentAccountID);
         SavingsAccount savingsAccount = new SavingsAccount(savingsAccountID);
 
-        double currentBalance = currentAccount.calculateNetCurrentBalance(file);
-        currentAccount.setBalance(currentBalance);
+        ArrayList<String> transactionDates = file.getDates();
 
-        double savingsBalance = savingsAccount.calculateTotalSavings(file);
-        savingsAccount.setBalance(savingsBalance);
+        for (String date : transactionDates) {
+            double currentBalance = currentAccount.calculateNetCurrentBalance(file,date);
+            currentAccount.setBalance(currentBalance);
 
-        // only fires if current acc deficit
-        if (currentAccount.getBalance()<0 && savingsAccount.getBalance()!=0) {
-            currentAccount.incrementBalance(savingsBalance,currentBalance,file);
-            savingsAccount.decrementBalance(savingsBalance,currentBalance,file);
+            double savingsBalance = savingsAccount.calculateTotalSavings(file,date);
+            savingsAccount.setBalance(savingsBalance);
 
-            System.out.println("ADJUSTMENTS MADE");
-            file.printAdjustments();
-        } else if (currentAccount.getBalance()<0 && savingsAccount.getBalance()==0) {
-            System.out.println("NO SAVINGS");
-        } else {
-            System.out.println("NO CURRENT ACCOUNT DEFICIT");
+            // only fires if current acc deficit
+            if (currentAccount.getBalance()<0 && savingsAccount.getBalance()!=0) {
+                currentAccount.incrementBalance(savingsBalance,currentBalance,file,date);
+                savingsAccount.decrementBalance(savingsBalance,currentBalance,file,date);
+
+                System.out.println("ADJUSTMENTS MADE");
+                file.printAdjustments();
+            } else if (currentAccount.getBalance()<0 && savingsAccount.getBalance()==0) {
+                System.out.println("NO SAVINGS");
+            } else {
+                System.out.println("NO CURRENT ACCOUNT DEFICIT");
+            }
         }
-
     }
 }

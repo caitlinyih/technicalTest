@@ -75,7 +75,7 @@ public class FileTests {
         int expectedID = savingsAccountID;
         assertEquals(expectedID,returnedID);
     }
-
+/*
     @Test
     public void whenGetCurrentAccountValuesThenReturnValues() {
         ArrayList<Double> returned = file.getCurrentAccountValues(currentAccountID);
@@ -89,7 +89,7 @@ public class FileTests {
         ArrayList<Double> expected = savingsAccountValues;
         assertEquals(expected,returned);
     }
-
+*/
     @Test
     public void whenWriteTransactionRecordThenTransactionRecorded() throws IOException, CsvException {
         file.writeTransactionRecord(testTransaction);
