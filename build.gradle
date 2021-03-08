@@ -20,6 +20,14 @@ jar {
     }
 }
 
+/*
+It's modifying the jar task.
+The from {} is telling the task where to get the files to include in the JAR file.
+It looks at the dependencies included by the compile configuration;
+if the dependency is a directory it includes its descendants as-is,
+otherwise it assumes it's a ZIP file (e.g. a JAR file) and includes the entries in said file.
+*/
+
 dependencies {
     // used compile instead of implementation to appear on compile classpath when creating JAR
     compile group: 'com.opencsv', name: 'opencsv', version: '5.3'

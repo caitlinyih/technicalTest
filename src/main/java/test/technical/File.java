@@ -18,7 +18,7 @@ public class File {
     private List<String[]> generateTransactionRecords() {
         try {
             CSVReader reader = new CSVReader(new FileReader(this.file));
-            List<String[]> transactions = reader.readAll();
+            List<String[]> transactions = reader.readAll();     // .readAll() return type List<> interface
             reader.close();
 
             return transactions;
